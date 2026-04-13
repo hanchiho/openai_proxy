@@ -1,0 +1,17 @@
+[project]
+name = "anthropic-openai-proxy"
+version = "0.1.0"
+description = "Proxy server that converts Anthropic API to OpenAI-compatible format"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.34.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "httpx>=0.25.0",
+    "python-dotenv>=1.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=75.0"]
+build-backend = "setuptools.build_meta"

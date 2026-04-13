@@ -1,0 +1,14 @@
+services:
+  proxy:
+    build:
+      context: .
+      dockerfile: Containerfile
+      args:
+        REGISTRY: ${REGISTRY:-docker.io}
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
+        PIP_TRUSTED_HOST: ${PIP_TRUSTED_HOST:-pypi.org}
+    ports:
+      - "${PROXY_PORT:-8082}:8082"
+    env_file:
+      - .env
+    restart: unless-stopped
