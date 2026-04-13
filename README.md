@@ -57,25 +57,25 @@ PROXY_PORT=8082
 
 ### 2. 빌드 및 실행
 
-```bash
-# podman-compose 사용
-podman-compose up -d --build
+운영 스크립트(`run.sh`)를 사용하면 빌드부터 실행까지 간편하게 관리할 수 있습니다:
 
-# 또는 직접 빌드/실행
-podman build -f Containerfile -t anthropic-proxy .
-podman run -d --name anthropic-proxy --env-file .env -p ${PROXY_PORT:-8082}:8082 anthropic-proxy
+```bash
+chmod +x run.sh
+
+./run.sh build     # 이미지 빌드
+./run.sh start     # 컨테이너 시작 (이미지 없으면 자동 빌드)
+./run.sh stop      # 컨테이너 중지 및 제거
+./run.sh restart   # 재시작
+./run.sh logs      # 로그 실시간 출력
+./run.sh status    # 상태 및 헬스체크 확인
 ```
 
-#### 폐쇄망 빌드
+> `.env`에 `REGISTRY`, `PIP_INDEX_URL`, `PIP_TRUSTED_HOST`를 설정하면 폐쇄망 빌드가 자동으로 적용됩니다.
 
-외부 레지스트리에 접근할 수 없는 환경에서는 빌드 인자를 지정합니다:
+또는 podman-compose를 직접 사용할 수도 있습니다:
 
 ```bash
-podman build \
-  --build-arg REGISTRY=my-registry.internal:5000 \
-  --build-arg PIP_INDEX_URL=https://pip-mirror.internal/simple \
-  --build-arg PIP_TRUSTED_HOST=pip-mirror.internal \
-  -t anthropic-proxy .
+podman-compose up -d --build
 ```
 
 ### 3. 동작 확인
