@@ -62,8 +62,8 @@ PROXY_PORT=8082
 podman-compose up -d --build
 
 # 또는 직접 빌드/실행
-podman build -t anthropic-proxy .
-podman run -d --name anthropic-proxy --env-file .env -p 8082:8082 anthropic-proxy
+podman build -f Containerfile -t anthropic-proxy .
+podman run -d --name anthropic-proxy --env-file .env -p ${PROXY_PORT:-8082}:8082 anthropic-proxy
 ```
 
 #### 폐쇄망 빌드
