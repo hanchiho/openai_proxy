@@ -26,12 +26,56 @@ Claude Code에서 `ANTHROPIC_BASE_URL`을 지정하여 로컬 vLLM 서버에 연
 - **에러 핸들링** — Anthropic API 에러 형식으로 일관된 에러 응답
 - **폐쇄망 지원** — 사설 레지스트리/pip 미러 주소 변경 가능
 
+## 사전 요구사항
+
+### 컨테이너 배포 (권장)
+
+| 항목 | 설명 |
+|------|------|
+| **Podman** | 컨테이너 런타임 (`run.sh` 및 이미지 빌드에 사용) |
+| **podman-compose** | `compose.yaml`로 실행할 경우 필요 (선택) |
+| **bash** | `run.sh` 실행에 필요 |
+| **curl** | `run.sh status` 헬스체크에 사용 (선택) |
+
+> 컨테이너 내부에서 Python 3.12 및 모든 패키지가 자동 설치되므로, 호스트에 Python을 직접 설치할 필요가 없습니다.
+
+### 로컬 개발 (컨테이너 없이 직접 실행)
+
+| 항목 | 설명 |
+|------|------|
+| **Python 3.12+** | 런타임 |
+| **pip** | 패키지 설치 |
+
+Python 패키지 의존성 (`pyproject.toml`에 정의):
+
+| 패키지 | 용도 |
+|--------|------|
+| `fastapi>=0.115.0` | HTTP API 프레임워크 |
+| `uvicorn>=0.34.0` | ASGI 서버 |
+| `pydantic>=2.0.0` | 요청/응답 모델 검증 |
+| `pydantic-settings>=2.0.0` | `.env` 기반 설정 관리 |
+| `httpx>=0.25.0` | 비동기 HTTP 클라이언트 (vLLM 백엔드 통신) |
+| `python-dotenv>=1.0.0` | `.env` 파일 로드 |
+
+로컬 설치 및 실행:
+
+```bash
+pip install .
+uvicorn src.main:app --host 0.0.0.0 --port 8082
+```
+
+### 테스트
+
+```bash
+pip install pytest
+pytest
+```
+
+### 백엔드 요구사항
+
+- OpenAI Chat Completions API 호환 서버 (예: [vLLM](https://docs.vllm.ai/))가 별도로 실행 중이어야 합니다.
+
 ## 빠른 시작
-
-### 요구사항
-
-- Python 3.12+
-- Podman (또는 podman-compose)
 
 ### 1. 설정
 
